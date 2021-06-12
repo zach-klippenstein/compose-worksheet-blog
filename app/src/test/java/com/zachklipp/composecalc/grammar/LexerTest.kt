@@ -1,13 +1,13 @@
-package com.zachklipp.composecalc
+package com.zachklipp.composecalc.grammar
 
 import com.google.common.truth.Truth.assertThat
-import com.zachklipp.composecalc.Token.LiteralToken
-import com.zachklipp.composecalc.Token.NameToken
-import com.zachklipp.composecalc.Token.Operator.ADD
-import com.zachklipp.composecalc.Token.Operator.ASSIGN
-import com.zachklipp.composecalc.Token.Operator.DIVIDE
-import com.zachklipp.composecalc.Token.Operator.MULTIPLY
-import com.zachklipp.composecalc.Token.Operator.SUBTRACT
+import com.zachklipp.composecalc.grammar.Token.LiteralToken
+import com.zachklipp.composecalc.grammar.Token.NameToken
+import com.zachklipp.composecalc.grammar.Token.Operator.ADD
+import com.zachklipp.composecalc.grammar.Token.Operator.ASSIGN
+import com.zachklipp.composecalc.grammar.Token.Operator.DIVIDE
+import com.zachklipp.composecalc.grammar.Token.Operator.MULTIPLY
+import com.zachklipp.composecalc.grammar.Token.Operator.SUBTRACT
 import com.zachklipp.composecalc.Value.Integer
 import com.zachklipp.composecalc.Value.Real
 import org.junit.Test

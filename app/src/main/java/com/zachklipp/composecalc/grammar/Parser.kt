@@ -1,16 +1,17 @@
-package com.zachklipp.composecalc
+package com.zachklipp.composecalc.grammar
 
-import com.zachklipp.composecalc.ExpressionAst.Assignment
-import com.zachklipp.composecalc.ExpressionAst.Literal
-import com.zachklipp.composecalc.ExpressionAst.NameReference
-import com.zachklipp.composecalc.ExpressionAst.Operation
-import com.zachklipp.composecalc.ParseError.Type.EXPECTED_EXPRESSION
-import com.zachklipp.composecalc.ParseError.Type.EXPECTED_NAME
-import com.zachklipp.composecalc.ParseError.Type.EXPECTED_OPERATOR
-import com.zachklipp.composecalc.Token.LiteralToken
-import com.zachklipp.composecalc.Token.NameToken
-import com.zachklipp.composecalc.Token.Operator
-import com.zachklipp.composecalc.Token.Operator.ASSIGN
+import com.zachklipp.composecalc.Expression
+import com.zachklipp.composecalc.grammar.ExpressionAst.Assignment
+import com.zachklipp.composecalc.grammar.ExpressionAst.Literal
+import com.zachklipp.composecalc.grammar.ExpressionAst.NameReference
+import com.zachklipp.composecalc.grammar.ExpressionAst.Operation
+import com.zachklipp.composecalc.grammar.ParseError.Type.EXPECTED_EXPRESSION
+import com.zachklipp.composecalc.grammar.ParseError.Type.EXPECTED_NAME
+import com.zachklipp.composecalc.grammar.ParseError.Type.EXPECTED_OPERATOR
+import com.zachklipp.composecalc.grammar.Token.LiteralToken
+import com.zachklipp.composecalc.grammar.Token.NameToken
+import com.zachklipp.composecalc.grammar.Token.Operator
+import com.zachklipp.composecalc.grammar.Token.Operator.ASSIGN
 
 /**
  * TODO write documentation
@@ -20,14 +21,15 @@ fun parse(input: String): ParseResult {
   return parse(tokens)
 }
 
+@Suppress("ReplaceRangeToWithUntil")
 private fun parse(input: List<Positioned<*>>): ParseResult {
   var index = 0
   val errors = mutableSetOf<ParseError>()
   // This stack will either be empty, or start with an expression. If non-empty, it will contain
   // alternating Expression, Operator, Expression, etc.
-  val lookBehind = mutableListOf<Any>()
+  val lookBehind = mutableListOf<HasPosition>()
 
-  fun peekOp() = lookBehind[lookBehind.size - 2] as? Operator
+  fun peekOp() = (lookBehind[lookBehind.size - 2] as? Positioned<*>)?.value as? Operator
 
   fun reduceHeadUntilPrecedence(targetPrecedence: Int) {
     // For well-formed input, the stack size will be
@@ -36,7 +38,7 @@ private fun parse(input: List<Positioned<*>>): ParseResult {
       // If the stack's in a bad state, an error will have already been reported, so just return
       // early.
       val rhs = lookBehind.removeLastOrNull() as? ExpressionAst ?: return
-      val op = lookBehind.removeLastOrNull() as? Operator ?: return
+      val op = ((lookBehind.removeLastOrNull() as? Positioned<*>)?.value as? Operator) ?: return
       val lhs = lookBehind.removeLastOrNull() as? ExpressionAst ?: return
 
       when (op) {
@@ -67,23 +69,23 @@ private fun parse(input: List<Positioned<*>>): ParseResult {
               type = if (token == ASSIGN) EXPECTED_NAME else EXPECTED_EXPRESSION,
               position = positionalToken.position
             )
-            token
+            positionalToken
           }
           prevExpr !is ExpressionAst -> {
             errors += ParseError(EXPECTED_EXPRESSION, positionalToken.position)
-            token
+            positionalToken
           }
           // We're the first operator, so always push.
-          prevOp == null -> token
-          prevOp !is Operator -> {
+          prevOp == null -> positionalToken
+          prevOp !is Positioned<*> || prevOp.value !is Operator -> {
             errors += ParseError(EXPECTED_OPERATOR, positionalToken.position)
-            token
+            positionalToken
           }
           else -> {
             reduceHeadUntilPrecedence(token.precedence)
             // The precedence of the previous operator is now guaranteed to be lower than ours,
             // so we can just push ourself onto the stack.
-            token
+            positionalToken
           }
         }
       }
@@ -98,9 +100,31 @@ private fun parse(input: List<Positioned<*>>): ParseResult {
   // If the stack is still not empty, the input was invalid, and errors will have been reported
   // already.
 
-  val expr = lookBehind.singleOrNull() as ExpressionAst?
-  return ParseResult(expr, errors)
+  if (lookBehind.isNotEmpty()) {
+    // Any bare operators left in the stack are missing expressions.
+    val first = lookBehind.first()
+    if (first !is ExpressionAst && (first as? Positioned<*>)?.value != ASSIGN) {
+      errors += ParseError(EXPECTED_EXPRESSION, 0..first.position.first)
+    }
+    val last = lookBehind.last()
+    if (last !is ExpressionAst && (last as? Positioned<*>)?.value != ASSIGN) {
+      errors += ParseError(EXPECTED_EXPRESSION, last.position.last + 1..Int.MAX_VALUE)
+    }
+
+    // Any remaining adjacent expressions are missing operators.
+    lookBehind.runningReduce { prev, next ->
+      if (!prev.isOperator && !next.isOperator) {
+        errors += ParseError(EXPECTED_OPERATOR, prev.position.last + 1..next.position.first - 1)
+      }
+      next
+    }
+  }
+
+  val singleNode = lookBehind.singleOrNull()
+  return ParseResult(singleNode as? ExpressionAst, errors)
 }
+
+private val HasPosition.isOperator get() = (this as? Positioned<*>)?.value is Operator
 
 data class ParseResult(
   val expression: Expression?,

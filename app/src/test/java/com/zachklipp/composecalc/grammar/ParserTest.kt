@@ -1,19 +1,25 @@
-package com.zachklipp.composecalc
+package com.zachklipp.composecalc.grammar
 
 import com.google.common.truth.Truth.assertThat
-import com.zachklipp.composecalc.ExpressionAst.Assignment
-import com.zachklipp.composecalc.ExpressionAst.Literal
-import com.zachklipp.composecalc.ExpressionAst.NameReference
-import com.zachklipp.composecalc.ExpressionAst.Operation
-import com.zachklipp.composecalc.ParseError.Type.EXPECTED_EXPRESSION
-import com.zachklipp.composecalc.ParseError.Type.EXPECTED_NAME
-import com.zachklipp.composecalc.ParseError.Type.EXPECTED_OPERATOR
-import com.zachklipp.composecalc.Token.Operator.ADD
-import com.zachklipp.composecalc.Token.Operator.MULTIPLY
+import com.zachklipp.composecalc.grammar.ExpressionAst.Assignment
+import com.zachklipp.composecalc.grammar.ExpressionAst.Literal
+import com.zachklipp.composecalc.grammar.ExpressionAst.NameReference
+import com.zachklipp.composecalc.grammar.ExpressionAst.Operation
+import com.zachklipp.composecalc.grammar.ParseError.Type.EXPECTED_EXPRESSION
+import com.zachklipp.composecalc.grammar.ParseError.Type.EXPECTED_NAME
+import com.zachklipp.composecalc.grammar.ParseError.Type.EXPECTED_OPERATOR
+import com.zachklipp.composecalc.grammar.Token.Operator.ADD
+import com.zachklipp.composecalc.grammar.Token.Operator.MULTIPLY
 import com.zachklipp.composecalc.Value.Integer
 import org.junit.Test
 
 class ParserTest {
+
+  @Test fun `empty input`() {
+    val result = parse("")
+    assertThat(result.errors).isEmpty()
+    assertThat(result.expression).isNull()
+  }
 
   @Test fun `single integer value`() {
     val result = parse("42")
@@ -104,7 +110,7 @@ class ParserTest {
 
   @Test fun `adjacent operators fails`() {
     val result = parse("1++2")
-    // assertThat(result.expression).isNull()
+    assertThat(result.expression).isEqualTo(Literal(Positioned(Integer(1), 0..0)))
     assertThat(result.errors).containsExactly(
       ParseError(EXPECTED_EXPRESSION, 2..2)
     )
@@ -114,7 +120,40 @@ class ParserTest {
     val result = parse("1 2")
     assertThat(result.expression).isNull()
     assertThat(result.errors).containsExactly(
-      ParseError(EXPECTED_OPERATOR, 0..0)
+      ParseError(EXPECTED_OPERATOR, 1..1)
+    )
+  }
+
+  @Test fun `leading operator fails`() {
+    val result = parse("+1+2")
+    assertThat(result.expression).isNull()
+    assertThat(result.errors).containsExactly(
+      ParseError(EXPECTED_EXPRESSION, 0..0)
+    )
+  }
+
+  @Test fun `trailing operator fails`() {
+    val result = parse("1+2+")
+    assertThat(result.expression).isNull()
+    assertThat(result.errors).containsExactly(
+      ParseError(EXPECTED_EXPRESSION, 4..Int.MAX_VALUE)
+    )
+  }
+
+  @Test fun `operator without operands`() {
+    val result = parse("+")
+    assertThat(result.expression).isNull()
+    assertThat(result.errors).containsExactly(
+      ParseError(EXPECTED_EXPRESSION, 0..0),
+      ParseError(EXPECTED_EXPRESSION, 1..Int.MAX_VALUE),
+    )
+  }
+
+  @Test fun `leading assign with multiple expression`() {
+    val result = parse("=1 2")
+    assertThat(result.errors).containsExactly(
+      ParseError(EXPECTED_NAME, 0..0),
+      ParseError(EXPECTED_OPERATOR, 2..2),
     )
   }
 }

@@ -1,15 +1,15 @@
-package com.zachklipp.composecalc
+package com.zachklipp.composecalc.grammar
 
 import com.google.common.truth.Truth.assertThat
-import com.zachklipp.composecalc.ExpressionAst.Assignment
-import com.zachklipp.composecalc.ExpressionAst.Literal
-import com.zachklipp.composecalc.ExpressionAst.NameReference
-import com.zachklipp.composecalc.ExpressionAst.Operation
-import com.zachklipp.composecalc.ParseError.Type.EXPECTED_EXPRESSION
-import com.zachklipp.composecalc.ParseError.Type.EXPECTED_NAME
-import com.zachklipp.composecalc.ParseError.Type.EXPECTED_OPERATOR
-import com.zachklipp.composecalc.Token.Operator.ADD
-import com.zachklipp.composecalc.Token.Operator.MULTIPLY
+import com.zachklipp.composecalc.grammar.ExpressionAst.Assignment
+import com.zachklipp.composecalc.grammar.ExpressionAst.Literal
+import com.zachklipp.composecalc.grammar.ExpressionAst.NameReference
+import com.zachklipp.composecalc.grammar.ExpressionAst.Operation
+import com.zachklipp.composecalc.grammar.ParseError.Type.EXPECTED_EXPRESSION
+import com.zachklipp.composecalc.grammar.ParseError.Type.EXPECTED_NAME
+import com.zachklipp.composecalc.grammar.ParseError.Type.EXPECTED_OPERATOR
+import com.zachklipp.composecalc.grammar.Token.Operator.ADD
+import com.zachklipp.composecalc.grammar.Token.Operator.MULTIPLY
 import com.zachklipp.composecalc.Value.Integer
 import org.junit.Test
 

@@ -7,7 +7,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
+import com.zachklipp.composecalc.ui.CalculatorScreen
 import com.zachklipp.composecalc.ui.theme.ComposeCalcTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,22 +19,18 @@ class MainActivity : ComponentActivity() {
       ComposeCalcTheme {
         // A surface container using the 'background' color from the theme
         Surface(color = MaterialTheme.colors.background) {
-          Greeting("Android")
+          CalculatorScreen(calculator = remember {
+            Calculator(
+              listOf(
+                "1+2",
+                "answer=42",
+                "answer/2",
+                "=error"
+              )
+            )
+          })
         }
       }
     }
-  }
-}
-
-@Composable
-fun Greeting(name: String) {
-  Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-  ComposeCalcTheme {
-    Greeting("Android")
   }
 }

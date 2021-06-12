@@ -1,14 +1,20 @@
-package com.zachklipp.composecalc
+package com.zachklipp.composecalc.grammar
 
+import com.zachklipp.composecalc.EvaluationContext
+import com.zachklipp.composecalc.EvaluationError
 import com.zachklipp.composecalc.EvaluationError.Type.NAME_ERROR
 import com.zachklipp.composecalc.EvaluationError.Type.UNDEFINED_NAME
-import com.zachklipp.composecalc.Token.Operator
-import com.zachklipp.composecalc.Token.Operator.ADD
-import com.zachklipp.composecalc.Token.Operator.ASSIGN
-import com.zachklipp.composecalc.Token.Operator.DIVIDE
-import com.zachklipp.composecalc.Token.Operator.MULTIPLY
-import com.zachklipp.composecalc.Token.Operator.SUBTRACT
+import com.zachklipp.composecalc.EvaluationResult
+import com.zachklipp.composecalc.Expression
+import com.zachklipp.composecalc.Value
+import com.zachklipp.composecalc.grammar.Token.Operator
+import com.zachklipp.composecalc.grammar.Token.Operator.ADD
+import com.zachklipp.composecalc.grammar.Token.Operator.ASSIGN
+import com.zachklipp.composecalc.grammar.Token.Operator.DIVIDE
+import com.zachklipp.composecalc.grammar.Token.Operator.MULTIPLY
+import com.zachklipp.composecalc.grammar.Token.Operator.SUBTRACT
 import com.zachklipp.composecalc.Value.Error
+import com.zachklipp.composecalc.createFormatSpecifier
 import java.util.Formattable
 import java.util.Formatter
 

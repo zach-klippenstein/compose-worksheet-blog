@@ -1,6 +1,17 @@
 package com.zachklipp.composecalc
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
+
+/**
+ * Creats a new [Calculator] instance, optionally populated with the given list of [rows].
+ */
+@Suppress("FunctionName")
+fun Calculator(rows: Iterable<String> = emptyList()): Calculator = CalculatorImpl().apply {
+  rows.forEachIndexed { index, row ->
+    setRowInput(index, row)
+  }
+}
 
 /**
  * TODO write documentation
@@ -8,6 +19,9 @@ import androidx.compose.runtime.Stable
 @Stable
 interface Calculator {
 
+  /**
+   * TODO kdoc
+   */
   val rows: List<Row>
 
   /**
@@ -22,18 +36,43 @@ interface Calculator {
    */
   fun insertRowAt(index: Int, input: String = "")
 
+  /**
+   * TODO kdoc
+   */
+  fun removeRowAt(index: Int)
+
   @Stable
   interface Row {
+    /**
+     * An object that uniquely identifies this row within this [Calculator] instance. IDs can be
+     * compared, but no other guarantees are made. They will remain stable over the lifetime of a
+     * given [Calculator] instance, but are not guaranteed to be stable between processes.
+     */
     val id: Any
+
+    /**
+     * The input for the row, used to calculate [result].
+     * This can be modified by calling [setRowInput].
+     * If this string is invalid, [errors] will be non-empty.
+     */
     val input: String
-    val errors: List<RowError>
+
+    /**
+     * A list of [ParseError]s that will be non-empty only if the [input] could not be parsed or
+     * executed.
+     */
+    val errors: List<Error>
+
+    /**
+     * The result of executing the calculation described by [input], within the context of the
+     * current [Calculator].
+     */
     val result: String
   }
 
-  @Stable
-  interface RowError {
-    /** The range of indices within the input that is in error. */
-    val inputRange: IntRange
-    val message: String
-  }
+  @Immutable
+  data class Error(
+    val message: String,
+    val position: IntRange
+  )
 }

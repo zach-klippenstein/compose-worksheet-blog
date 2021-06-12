@@ -1,4 +1,4 @@
-package com.zachklipp.composecalc
+package com.zachklipp.composecalc.grammar
 
 import kotlin.math.max
 import kotlin.math.min

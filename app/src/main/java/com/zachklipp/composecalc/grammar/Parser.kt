@@ -1,16 +1,17 @@
-package com.zachklipp.composecalc
+package com.zachklipp.composecalc.grammar
 
-import com.zachklipp.composecalc.ExpressionAst.Assignment
-import com.zachklipp.composecalc.ExpressionAst.Literal
-import com.zachklipp.composecalc.ExpressionAst.NameReference
-import com.zachklipp.composecalc.ExpressionAst.Operation
-import com.zachklipp.composecalc.ParseError.Type.EXPECTED_EXPRESSION
-import com.zachklipp.composecalc.ParseError.Type.EXPECTED_NAME
-import com.zachklipp.composecalc.ParseError.Type.EXPECTED_OPERATOR
-import com.zachklipp.composecalc.Token.LiteralToken
-import com.zachklipp.composecalc.Token.NameToken
-import com.zachklipp.composecalc.Token.Operator
-import com.zachklipp.composecalc.Token.Operator.ASSIGN
+import com.zachklipp.composecalc.Expression
+import com.zachklipp.composecalc.grammar.ExpressionAst.Assignment
+import com.zachklipp.composecalc.grammar.ExpressionAst.Literal
+import com.zachklipp.composecalc.grammar.ExpressionAst.NameReference
+import com.zachklipp.composecalc.grammar.ExpressionAst.Operation
+import com.zachklipp.composecalc.grammar.ParseError.Type.EXPECTED_EXPRESSION
+import com.zachklipp.composecalc.grammar.ParseError.Type.EXPECTED_NAME
+import com.zachklipp.composecalc.grammar.ParseError.Type.EXPECTED_OPERATOR
+import com.zachklipp.composecalc.grammar.Token.LiteralToken
+import com.zachklipp.composecalc.grammar.Token.NameToken
+import com.zachklipp.composecalc.grammar.Token.Operator
+import com.zachklipp.composecalc.grammar.Token.Operator.ASSIGN
 
 /**
  * TODO write documentation

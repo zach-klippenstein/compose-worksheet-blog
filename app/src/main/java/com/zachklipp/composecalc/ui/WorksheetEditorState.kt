@@ -12,12 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import com.zachklipp.composecalc.Worksheet
 import com.zachklipp.composecalc.Value
 import com.zachklipp.composecalc.Value.Error
 import com.zachklipp.composecalc.Value.Fraction
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.cache
+import com.zachklipp.composecalc.Worksheet
 import java.util.concurrent.atomic.AtomicInteger
 
 @Stable

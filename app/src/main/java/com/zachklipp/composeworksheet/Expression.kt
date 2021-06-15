@@ -1,9 +1,13 @@
 package com.zachklipp.composeworksheet
 
 /**
- * TODO kdoc
+ * Abstract representation of a mathematical expression that can be evaluated.
  */
 interface Expression {
+  /**
+   * Evaluates this expression, using the given [EvaluationContext] to lookup any names referenced
+   * in the expression.
+   */
   fun evaluate(context: EvaluationContext): EvaluationResult
 }
 

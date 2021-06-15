@@ -18,9 +18,6 @@ import com.zachklipp.composeworksheet.createFormatSpecifier
 import java.util.Formattable
 import java.util.Formatter
 
-/**
- * TODO kdoc
- */
 internal sealed class ExpressionAst : Expression, HasPosition, Formattable {
 
   data class NameReference(val name: Positioned<String>) : ExpressionAst()

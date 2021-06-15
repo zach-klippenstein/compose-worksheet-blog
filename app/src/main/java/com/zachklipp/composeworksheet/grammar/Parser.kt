@@ -14,7 +14,9 @@ import com.zachklipp.composeworksheet.grammar.Token.Operator
 import com.zachklipp.composeworksheet.grammar.Token.Operator.ASSIGN
 
 /**
- * TODO write documentation
+ * Parses a string and returns the [Expression] it represents, along with zero or more [ParseError]s
+ * if the string was not valid. Both an expression and non-zero number of errors may be returned if
+ * a substring of the input could be parsed enough to get a valid expression.
  */
 fun parse(input: String): ParseResult {
   val tokens = tokenize(input)

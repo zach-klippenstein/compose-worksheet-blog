@@ -4,9 +4,8 @@ import kotlin.math.max
 import kotlin.math.min
 
 /**
- * TODO kdoc
+ * Represents an object that is associated with a position in a [parsed][parse] string.
  */
-// TODO betternamme
 internal interface HasPosition {
   val position: IntRange
 }
@@ -17,9 +16,7 @@ internal interface HasPosition {
 internal data class Positioned<out T : Any>(
   val value: T,
   override val position: IntRange
-) : HasPosition {
-  fun <R : Any> map(f: (T) -> R): Positioned<R> = Positioned(f(value), position)
-}
+) : HasPosition
 
 internal operator fun IntRange.plus(other: IntRange): IntRange =
   IntRange(

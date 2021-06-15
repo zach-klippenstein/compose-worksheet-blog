@@ -15,13 +15,15 @@ fun Worksheet(rows: Iterable<String> = emptyList()): Worksheet = WorksheetImpl()
 }
 
 /**
- * TODO write documentation
+ * A collection of calculations represented by [Row]s. Rows can be inserted and deleted anywhere.
  */
 @Stable
 interface Worksheet {
 
   /**
-   * TODO kdoc
+   * All the [Row]s in this worksheet. Despite the type of this property being a read-only [List],
+   * the returned [List] can be changed by calling other methods on this class. Such changes will
+   * notify any snapshot observers that are tracking this property.
    */
   val rows: List<Row>
 
@@ -32,7 +34,7 @@ interface Worksheet {
   fun insertRowAt(index: Int)
 
   /**
-   * TODO kdoc
+   * Removes the row at the given index, if one exists. The rows below it will be shifted up.
    */
   fun removeRowAt(index: Int)
 

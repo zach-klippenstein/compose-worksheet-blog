@@ -29,16 +29,6 @@ internal class WorksheetImpl : Worksheet {
     ensureAtLeastOneRow()
   }
 
-  // override fun setRowInput(index: Int, input: String) {
-  //   // Ensure a row exists at the given index.
-  //   while (index >= _rows.size) {
-  //     _rows += newRow().apply {
-  //       previousRow = _rows.lastOrNull()
-  //     }
-  //   }
-  //   _rows[index].input = input
-  // }
-
   override fun insertRowAt(index: Int) {
     if (index >= _rows.size) {
       // The insert is out-of-bounds of the list, so we have to create rows to fill the list up to

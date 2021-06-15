@@ -23,7 +23,8 @@ import androidx.compose.ui.unit.dp
 import com.zachklipp.composeworksheet.Worksheet
 
 /**
- * TODO write documentation
+ * A component that displays all the rows in a [Worksheet] allows editing each [Row]'s input, and
+ * displays any errors for each row.
  */
 @Composable fun WorksheetEditor(worksheet: WorksheetEditorState) {
   val focusManager = LocalFocusManager.current

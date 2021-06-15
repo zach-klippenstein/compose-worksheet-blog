@@ -1,7 +1,7 @@
 package com.zachklipp.composeworksheet
 
 /**
- * TODO write documentation
+ * Returns a valid [java.util.Formatter] specifier given pieces of a specification.
  */
 internal fun createFormatSpecifier(
   flags: Int,
